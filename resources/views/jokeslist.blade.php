@@ -3,23 +3,29 @@
 @section('content')
     <div class="container">
         <div class="row">
-            <div class="col-md-8 col-md-offset-2">
+            <div class="col-md-12">
                 <div class="panel panel-default">
                     <div class="panel-heading">Search Results</div>
                     <div class="panel-body">
                         @if($jokes->total == 0)
                             <b>No Result Found</b>
                         @else
-                            <table>
-                                @foreach($jokes->result as $key => $joke)
-                                    <tr>
-                                        <td>{{ $key+1 }}</td>
-                                        <td>{{ $joke->value }}</td>
-                                        <td><a href="../jokes/up/{{$joke->id}}">Like</a></td>
-                                        <td><a href="../jokes/down/{{$joke->id}}">Dislike</a></td>
-                                    </tr>
-                                @endforeach
-                            </table>
+                            @foreach($jokes->result as $key => $joke)
+                                <div class="row">
+                                    <div class="col-md-1">
+                                        {{ $key+1 }}
+                                    </div>
+                                    <div class="col-md-9">
+                                        {{ $joke->value }}
+                                    </div>
+                                    <div class="col-md-1">
+                                        <a href="../jokes/up/{{$joke->id}}">Like</a>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <a href="../jokes/down/{{$joke->id}}">Dislike</a>
+                                    </div>
+                                </div>
+                            @endforeach
                         @endif
                     </div>
                 </div>
