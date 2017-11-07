@@ -17,7 +17,7 @@ Route::get('jokes/category/{category}', 'JokesController@show')->middleware('aut
 // Search Screen
 Route::get('jokes/search', ['as' => 'search', 'uses' => 'JokesController@search'])->middleware('auth');
 // Search Joke
-Route::post('jokes/search', ['as' => 'search_joke', 'uses' => 'JokesController@searchresult'])->middleware('auth');
+Route::post('jokes/search', ['as' => 'search_joke', 'uses' => 'JokesController@searchResult'])->middleware('auth');
 // Leaderboard Screen
 Route::get('jokes/leaderboard', 'VoteController@rank')->middleware('auth');
 // Like
