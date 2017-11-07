@@ -38,10 +38,15 @@ class JokesController extends Controller
     public function searchResult(Request $request) {
         // Search String
         $search = $request->input('search');
-        // Fetch Joke by Search String
-        $jokes = json_decode(CNAPI::getJokeByText($search));
-        // Render on Jokelist View
-        return view('jokeslist', compact('jokes'));
+
+        if(!empty($search)) {
+            // Fetch Joke by Search String
+            $jokes = json_decode(CNAPI::getJokeByText($search));
+            // Render on Jokelist View
+            return view('jokeslist', compact('jokes'));
+        } else {
+            return redirect()->back()->withErrors('Errors');
+        }
     }
 
     /**

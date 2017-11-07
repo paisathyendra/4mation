@@ -11,11 +11,12 @@
                             <b>No Result Found</b>
                         @else
                             <table>
-                                @foreach($jokes->result as $joke)
+                                @foreach($jokes->result as $key => $joke)
                                     <tr>
+                                        <td>{{ $key+1 }}</td>
                                         <td>{{ $joke->value }}</td>
-                                        <td><a href="../jokes/up/{{$joke->id}}">Up</a></td>
-                                        <td><a href="../jokes/down/{{$joke->id}}">Down</a></td>
+                                        <td><a href="../jokes/up/{{$joke->id}}">Like</a></td>
+                                        <td><a href="../jokes/down/{{$joke->id}}">Dislike</a></td>
                                     </tr>
                                 @endforeach
                             </table>
