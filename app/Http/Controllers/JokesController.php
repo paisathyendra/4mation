@@ -26,8 +26,12 @@ class JokesController extends Controller
         $jokes = json_decode(CNAPI::getRandomJokeByCategory($category));
         // Fetch likes & dislikes count for joke
         list($likes, $dislikes) = VoteController::voteDetails($jokes->id);
-        // Render on Joes View
-        return view('jokes', ['jokes' => $jokes, 'likes' => $likes, 'dislikes' => $dislikes]);
+        // Likes count
+        $likesCount = is_array($likes) ? $likes[0]->vote_count : $likes;
+        // Dislikes count
+        $dislikesCount = is_array($dislikes) ? $dislikes[0]->vote_count : $dislikes;
+        // Render on Jokes View
+        return view('jokes', ['jokes' => $jokes, 'likes' => $likesCount, 'dislikes' => $dislikesCount]);
     }
 
     /**
