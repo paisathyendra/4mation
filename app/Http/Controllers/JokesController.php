@@ -41,7 +41,21 @@ class JokesController extends Controller
 
         if(!empty($search)) {
             // Fetch Joke by Search String
-            $jokes = json_decode(CNAPI::getJokeByText($search));
+            $jokesObject = json_decode(CNAPI::getJokeByText($search));
+
+            if($jokesObject->total != 0) {
+                foreach ($jokesObject->result as $joke) {
+                    // Get like and dislike count
+                    list($likes, $dislikes) = VoteController::voteDetails($joke->id);
+                    // Likes count
+                    $likesCount = is_array($likes) ? $likes[0]->vote_count : $likes;
+                    // Dislikes count
+                    $dislikesCount = is_array($dislikes) ? $dislikes[0]->vote_count : $dislikes;
+                    $jokes[] = ['id' => $joke->id, 'value' => $joke->value, 'likes_count' => $likesCount, 'dislikes_count' => $dislikesCount];
+                }
+            } else {
+                $jokes['total'] = 0;
+            }
             // Render on Jokelist View
             return view('jokeslist', compact('jokes'));
         } else {

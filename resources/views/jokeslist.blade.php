@@ -7,22 +7,22 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">Search Results</div>
                     <div class="panel-body">
-                        @if($jokes->total == 0)
-                            <b>No Result Found</b>
+                        @if(isset($jokes['total']) && $jokes['total'] == 0)
+                            <b>No Results Found</b>
                         @else
-                            @foreach($jokes->result as $key => $joke)
+                            @foreach($jokes as $key => $joke)
                                 <div class="row">
                                     <div class="col-md-1">
                                         {{ $key+1 }}
                                     </div>
                                     <div class="col-md-9">
-                                        {{ $joke->value }}
+                                        {{ $joke['value'] }}
                                     </div>
                                     <div class="col-md-1">
-                                        <a href="../jokes/up/{{$joke->id}}">Like</a>
+                                        <a href="../jokes/up/{{$joke['id']}}">Like</a> ({{ $joke['likes_count']  }})
                                     </div>
                                     <div class="col-md-1">
-                                        <a href="../jokes/down/{{$joke->id}}">Dislike</a>
+                                        <a href="../jokes/down/{{$joke['id']}}">Dislike</a> ({{ $joke['dislikes_count']  }})
                                     </div>
                                 </div>
                             @endforeach
