@@ -8,30 +8,38 @@ use Illuminate\Support\Facades\DB;
 
 class VoteController extends Controller
 {
+    const LIKE = 1;
+    const DISLIKE = 0;
 
     /**
-     * Like
+     * Like Joke
      * @param $id
      * @return \Illuminate\Http\RedirectResponse
      */
     public function voteUp($id)
     {
-        $vote = Vote::firstOrNew(array('user_id' => \Auth::user()->id, 'joke_id' => $id));
-        $vote->vote= 1;
+        $data = array('user_id' => \Auth::user()->id, 'joke_id' => $id);
+
+        $vote = Vote::firstOrNew($data);
+        $vote->vote = self::LIKE;
         $vote->save();
+
         return redirect()->back();
     }
 
     /**
-     * Dislike
+     * Dislike Joke
      * @param $id
      * @return \Illuminate\Http\RedirectResponse
      */
     public function voteDown($id)
     {
-        $vote = Vote::firstOrNew(array('user_id' => \Auth::user()->id, 'joke_id' => $id));
-        $vote->vote= 0;
+        $data = array('user_id' => \Auth::user()->id, 'joke_id' => $id);
+
+        $vote = Vote::firstOrNew($data);
+        $vote->vote = self::DISLIKE;
         $vote->save();
+
         return redirect()->back();
     }
 
@@ -43,7 +51,7 @@ class VoteController extends Controller
     {
         $jokes = DB::table('votes')
             ->select(DB::raw('count(*) as vote_count, joke_id'))
-            ->where('vote', '=', 1)
+            ->where('vote', '=', self::LIKE)
             ->groupBy('joke_id')
             ->orderBy('vote_count', 'desc')
             ->limit(10)
@@ -67,19 +75,19 @@ class VoteController extends Controller
         $likes = json_decode(DB::table('votes')
             ->select(DB::raw('count(*) as vote_count'))
             ->where('joke_id', '=', $id)
-            ->where('vote','=', 1)
+            ->where('vote','=', self::LIKE)
             ->groupBy('joke_id')
             ->get());
 
         $dislikes = json_decode(DB::table('votes')
             ->select(DB::raw('count(*) as vote_count'))
             ->where('joke_id', '=', $id)
-            ->where('vote','=', 0)
+            ->where('vote','=', self::DISLIKE)
             ->groupBy('joke_id')
             ->get());
 
-        $likesCount = empty($likes)? 0 : $likes;
-        $dislikesCount = empty($dislikes) ? 0 : $dislikes;
+        $likesCount = empty($likes)? self::DISLIKE : $likes;
+        $dislikesCount = empty($dislikes) ? self::DISLIKE : $dislikes;
 
         return array($likesCount,$dislikesCount);
     }
